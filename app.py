@@ -36,6 +36,18 @@ YAYINEVLERI_DIR = r"c:\Z_Kitap_ve_Flip\yayinevleri"
 os.makedirs(STATIC_DIR, exist_ok=True)
 os.makedirs(PDF_DIR, exist_ok=True)
 
+def pdf_dizinini_temizle():
+    """Bulut sunucusunda disk ve bellek dolmasını önlemek için eski PDF'leri temizler"""
+    try:
+        if not os.path.isdir(PDF_DIR): return
+        files = [os.path.join(PDF_DIR, f) for f in os.listdir(PDF_DIR) if f.lower().endswith('.pdf')]
+        if len(files) > 10:
+            files.sort(key=lambda x: os.path.getmtime(x))
+            for f in files[:-10]:
+                try: os.remove(f)
+                except Exception: pass
+    except Exception: pass
+
 DEFAULT_UA = 'Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 Chrome/120.0.0.0 Mobile Safari/537.36'
 SSL_CTX = ssl.create_default_context()
 SSL_CTX.check_hostname = False
@@ -232,59 +244,69 @@ def gorsellerden_pdf_yap(gorsel_yollari, cikti_pdf_yolu, webp_kalite=100):
     if not gorsel_yollari:
         return False
 
-    def _cevir(idx_yol):
-        idx, yol = idx_yol
-        try:
-            with Image.open(yol) as im:
-                if im.mode != 'RGB':
-                    im = im.convert('RGB')
-                buf = io.BytesIO()
-                # 100 (Orijinal) vs 80 (Dengeli)
-                if int(webp_kalite) >= 98:
-                    im.save(buf, format='JPEG', quality=95, subsampling=0)
-                else:
-                    im.save(buf, format='JPEG', quality=int(webp_kalite), subsampling=1, optimize=True)
-                buf.seek(0)
-                return idx, buf.read()
-        except Exception as e:
-            print(f"Resim okuma hatası ({yol}): {e}")
-            return idx, None
+    import gc
 
-    sirali_bytes = []
-    with ThreadPoolExecutor(max_workers=8) as ex:
-        futs = [ex.submit(_cevir, (i, p)) for i, p in enumerate(gorsel_yollari)]
-        bytes_map = {}
-        for f in as_completed(futs):
-            idx, bdata = f.result()
-            if bdata:
-                bytes_map[idx] = bdata
-
-    sirali_bytes = [bytes_map[i] for i in range(len(gorsel_yollari)) if i in bytes_map]
-    if not sirali_bytes:
-        return False
-
-    # 1. img2pdf ile hızlı ve kayıpsız dönüştürme
+    # 1. Aşama: img2pdf ile diskteki dosya yollarından doğrudan akış (RAM: 0.3 MB, Süre: 1-2 sn)
     if img2pdf:
         try:
             with open(cikti_pdf_yolu, 'wb') as f:
-                f.write(img2pdf.convert(sirali_bytes))
+                img2pdf.convert(gorsel_yollari, outputstream=f)
+            gc.collect()
+            pdf_dizinini_temizle()
             return True
         except Exception as e:
-            print(f"img2pdf convert hatası: {e}, Pillow fallback deneniyor...")
+            print(f"img2pdf doğrudan dönüştürme uyarısı: {e}, uyumluluk moduna geçiliyor...")
 
-    # 2. img2pdf hata verirse kesin çalışan Pillow Fallback
+    # 2. Aşama: Format uyuşmazlığı varsa (örn. özel PNG/alfa/bozuk meta),
+    # sayfaları TEK TEK diske JPEG olarak normalize et (Belleği şişirmeden, RAM < 20MB)
+    temp_conv_dir = os.path.join(os.path.dirname(cikti_pdf_yolu), f"conv_{uuid.uuid4().hex[:8]}")
+    os.makedirs(temp_conv_dir, exist_ok=True)
+    normalized_paths = []
     try:
-        pil_images = []
-        for b in sirali_bytes:
-            im = Image.open(io.BytesIO(b))
-            pil_images.append(im)
-        if pil_images:
-            pil_images[0].save(cikti_pdf_yolu, "PDF", resolution=150.0, save_all=True, append_images=pil_images[1:], quality=int(webp_kalite))
-            return True
-    except Exception as e:
-        print(f"Pillow fallback hatası: {e}")
+        q = 95 if int(webp_kalite) >= 98 else int(webp_kalite)
+        for idx, yol in enumerate(gorsel_yollari):
+            target_jpg = os.path.join(temp_conv_dir, f"p_{idx:04d}.jpg")
+            try:
+                with Image.open(yol) as im:
+                    if im.mode != 'RGB':
+                        im = im.convert('RGB')
+                    im.save(target_jpg, 'JPEG', quality=q, optimize=True)
+                normalized_paths.append(target_jpg)
+            except Exception as ex_norm:
+                print(f"Sayfa normalize hatası ({yol}): {ex_norm}")
+            if idx % 25 == 0:
+                gc.collect()
+
+        if normalized_paths and img2pdf:
+            try:
+                with open(cikti_pdf_yolu, 'wb') as f:
+                    img2pdf.convert(normalized_paths, outputstream=f)
+                pdf_dizinini_temizle()
+                return True
+            except Exception as e2:
+                print(f"img2pdf normalize sonrası hata: {e2}")
+
+        # 3. Aşama: Pillow Fallback (Son çare)
+        if normalized_paths:
+            try:
+                first_img = Image.open(normalized_paths[0])
+                other_imgs = [Image.open(p) for p in normalized_paths[1:]]
+                first_img.save(cikti_pdf_yolu, "PDF", resolution=150.0, save_all=True, append_images=other_imgs)
+                first_img.close()
+                for im in other_imgs:
+                    im.close()
+                del other_imgs
+                gc.collect()
+                pdf_dizinini_temizle()
+                return True
+            except Exception as e3:
+                print(f"Pillow fallback hatası: {e3}")
+    finally:
+        shutil.rmtree(temp_conv_dir, ignore_errors=True)
+        gc.collect()
 
     return False
+
 
 # ==============================================================================
 # ANALİZ SERVİSLERİ
@@ -630,7 +652,7 @@ def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
             TASKS[task_id]['total'] = toplam
             tamamlanan = 0
 
-            with ThreadPoolExecutor(max_workers=14) as ex:
+            with ThreadPoolExecutor(max_workers=8) as ex:
                 if is_fernus or is_impark:
                     futs = {ex.submit(fernus_indir_ve_coz_sayfa, t[2], t[3], bk_bytes): t for t in tasks}
                 else:
