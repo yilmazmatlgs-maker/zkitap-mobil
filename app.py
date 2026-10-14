@@ -27,6 +27,11 @@ try:
 except ImportError:
     img2pdf = None
 
+# -*- coding: utf-8 -*-
+"""Fernus 141 Yayinevi Gomulu Kripto Veritabani"""
+
+YAYINEVLERI_DATA = {'1': {'numara': '1', 'publisher': 'Murat Yayınları', 'pkxkname': 'muratyayinlari', 'prefix': None, 'fernusCode_sifreli': '==AF/iokYABaQejzEE9eAsba', 'fernusCode_gercek': '6_4_8'}, '10': {'numara': '10', 'publisher': 'Köşebilgi Yayınları', 'pkxkname': 'kosebilgiyayinlari', 'prefix': None, 'fernusCode_sifreli': '==wDaI1/vFy3tJm2FTDRDkF3', 'fernusCode_gercek': '9_11_22'}, '100': {'numara': '100', 'publisher': 'Pat Yayınları', 'pkxkname': 'pat', 'prefix': None, 'fernusCode_sifreli': '==woR1aSAfXYQPaIaoSDYUaI', 'fernusCode_gercek': '10_6_12'}, '102': {'numara': '102', 'publisher': 'Akademik Başarı', 'pkxkname': 'akademikbasari', 'prefix': None, 'fernusCode_sifreli': '==gE3MYl+zoyNbNdGDWFGMC4', 'fernusCode_gercek': '2_26_21'}, '104': {'numara': '104', 'publisher': 'Adım Adım Işıklı', 'pkxkname': 'adimadimisikli', 'prefix': None, 'fernusCode_sifreli': '==g8kC13Omm6xI3SUhriqgaG', 'fernusCode_gercek': '8_13_9'}, '105': {'numara': '105', 'publisher': 'Artı Eğitim', 'pkxkname': 'artiegitim', 'prefix': None, 'fernusCode_sifreli': '==AbkzlcXqtBPAehnrEioLF0', 'fernusCode_gercek': '8_9_18'}, '106': {'numara': '106', 'publisher': 'Sonuc', 'pkxkname': 'sonuc', 'prefix': None, 'fernusCode_sifreli': '==wgBN5yBec3KqZeERJgutah', 'fernusCode_gercek': '5_6_8'}, '11': {'numara': '11', 'publisher': 'Vip Yayınları', 'pkxkname': 'vipyayinlari', 'prefix': None, 'fernusCode_sifreli': '==wJuOwK33z0KIhqyMKpdNOs', 'fernusCode_gercek': '8_2_4'}, '12': {'numara': '12', 'publisher': 'Çanta Yayıncılık', 'pkxkname': 'canta', 'prefix': None, 'fernusCode_sifreli': '==A4udGEOLpcHQyAJr4jYHJb', 'fernusCode_gercek': '2_12_24'}, '14': {'numara': '14', 'publisher': 'Oksijen Yayınları', 'pkxkname': 'oksijen', 'prefix': None, 'fernusCode_sifreli': '==ATEqsLIa7ExwmWmfUYaVQt', 'fernusCode_gercek': '26_10_20'}, '15': {'numara': '15', 'publisher': 'Hiper Zeka', 'pkxkname': 'hiperzeka', 'prefix': None, 'fernusCode_sifreli': '==AYsj8fKLD/KHzNGnvhbxDb', 'fernusCode_gercek': '8_4_8'}, '17': {'numara': '17', 'publisher': 'Kronometre Yayınları', 'pkxkname': 'kronometreyayinlari', 'prefix': None, 'fernusCode_sifreli': '==QPRO59g91NazOxVFhlKjjZ', 'fernusCode_gercek': '16_11_22'}, '19': {'numara': '19', 'publisher': 'Avantaj Yayınları', 'pkxkname': 'avantaj', 'prefix': None, 'fernusCode_sifreli': '==g99Mu8ZT2cdeNjzqBX5RY1', 'fernusCode_gercek': '11_2_4'}, '2': {'numara': '2', 'publisher': 'MUBA', 'pkxkname': 'muba', 'prefix': None, 'fernusCode_sifreli': '==Q2WphUNNMYDWvx8XOFGsYK', 'fernusCode_gercek': '4_7_14'}, '20': {'numara': '20', 'publisher': 'Avantaj Yayınları', 'pkxkname': 'avantaj', 'prefix': None, 'fernusCode_sifreli': '==g99Mu8ZT2cdeNjzqBX5RY1', 'fernusCode_gercek': '11_2_4'}, '206': {'numara': '206', 'publisher': 'Netiz Yayınları', 'pkxkname': 'netiz', 'prefix': None, 'fernusCode_sifreli': '==wQp39KPtGyi2dA/KT/aBCJ', 'fernusCode_gercek': '2_26_19'}, '209': {'numara': '209', 'publisher': 'Toprak Yayıncılık', 'pkxkname': 'toprak', 'prefix': None, 'fernusCode_sifreli': '==A2MJ/AtSuzAjElex9c3Dbt', 'fernusCode_gercek': '9_5_10'}, '21': {'numara': '21', 'publisher': 'Esen Yayınları', 'pkxkname': 'esenyayinlari', 'prefix': None, 'fernusCode_sifreli': '==QAiSmulgqD4cxwaBKNSbZQ', 'fernusCode_gercek': '3_6_10'}, '210': {'numara': '210', 'publisher': 'Dakika Yayınları', 'pkxkname': 'dakikayayinlari', 'prefix': None, 'fernusCode_sifreli': '==wCEoHVslc2hl37TdBoCAlD', 'fernusCode_gercek': '21_4_8'}, '213': {'numara': '213', 'publisher': 'Paragrafın Şifresi', 'pkxkname': 'paragrafinsifresi', 'prefix': None, 'fernusCode_sifreli': '==wA4yRIkLGcJs+p27NkDijb', 'fernusCode_gercek': '6_10_20'}, '216': {'numara': '216', 'publisher': 'Speed Up', 'pkxkname': 'speedup', 'prefix': None, 'fernusCode_sifreli': '==Q+y1orNY+EU1ww2jYjEqdL', 'fernusCode_gercek': '8_11_22'}, '218': {'numara': '218', 'publisher': 'ilkokul1.com Yayınları', 'pkxkname': 'ilkokul1', 'prefix': None, 'fernusCode_sifreli': '==gAOMVMREVNabUZyt7KE7ZB', 'fernusCode_gercek': '17_4_8'}, '223': {'numara': '223', 'publisher': 'Duyu Yayınları', 'pkxkname': 'duyu', 'prefix': None, 'fernusCode_sifreli': '==QBIWXPFWHCM4rV1NeE0Yfn', 'fernusCode_gercek': '2_26_16'}, '224': {'numara': '224', 'publisher': 'Birikim Yayınları', 'pkxkname': 'birikim', 'prefix': None, 'fernusCode_sifreli': '==wopvdaLOxx1SjgjfAIw1aC', 'fernusCode_gercek': '2_26_15'}, '225': {'numara': '225', 'publisher': 'MOTİVASYON', 'pkxkname': 'motivasyon', 'prefix': None, 'fernusCode_sifreli': '==AmZBU/204gYeWYPHRn3Ihq', 'fernusCode_gercek': '25_4_8'}, '226': {'numara': '226', 'publisher': 'Fatih Ay Yayınları', 'pkxkname': 'fatihay', 'prefix': None, 'fernusCode_sifreli': '==gtwHfa74M4jHQACC6OM7up', 'fernusCode_gercek': '2_26_14'}, '229': {'numara': '229', 'publisher': 'Talent Team Yayıncılık', 'pkxkname': 'dijitaltalent', 'prefix': None, 'fernusCode_sifreli': '==wZyK46Be26ahPrMisCWlUd', 'fernusCode_gercek': '2_26_7'}, '23': {'numara': '23', 'publisher': 'Limit', 'pkxkname': 'limit', 'prefix': None, 'fernusCode_sifreli': '==wsE9pwKiWrdIBdOGXPYAOF', 'fernusCode_gercek': '4_17_5'}, '230': {'numara': '230', 'publisher': 'Yunus Emre Yayınları', 'pkxkname': 'yunusemre', 'prefix': None, 'fernusCode_sifreli': '==Qam6cbV1/z0AzpA3ekXrJa', 'fernusCode_gercek': '2_26_6'}, '24': {'numara': '24', 'publisher': 'Limit', 'pkxkname': 'limit', 'prefix': None, 'fernusCode_sifreli': '==wsE9pwKiWrdIBdOGXPYAOF', 'fernusCode_gercek': '4_17_5'}, '25': {'numara': '25', 'publisher': 'More And More', 'pkxkname': 'kurmay', 'prefix': None, 'fernusCode_sifreli': '==AnR1upKjObnIRg9TCHJzNP', 'fernusCode_gercek': '1_4_8'}, '293': {'numara': '293', 'publisher': 'Öncelik Yayınları', 'pkxkname': 'oncelikyayinlari', 'prefix': None, 'fernusCode_sifreli': '==AQgR6/Jtzt6Pe0NhzEb2CP', 'fernusCode_gercek': '16_1_2'}, '30': {'numara': '30', 'publisher': 'Hız Yayınları', 'pkxkname': 'hizyayinlari', 'prefix': None, 'fernusCode_sifreli': '==gNBvPrdq9uAUPH7mA4sbIu', 'fernusCode_gercek': '3_3_6'}, '31': {'numara': '31', 'publisher': 'NFT Yayınları', 'pkxkname': 'nftyayinlari', 'prefix': None, 'fernusCode_sifreli': '==wU6JnbbSPHMdOQDQ5DvI+z', 'fernusCode_gercek': '26_5_10'}, '32': {'numara': '32', 'publisher': 'Günay Yayınları', 'pkxkname': 'gunayyayinlari', 'prefix': None, 'fernusCode_sifreli': '==AMc23nfN/+IG9rJbDB7guP', 'fernusCode_gercek': '9_4_8'}, '33': {'numara': '33', 'publisher': 'Gizli Yayınları', 'pkxkname': 'gizliyayinlari', 'prefix': None, 'fernusCode_sifreli': '==AvFWBhpk8c3rrTZcUhGlbE', 'fernusCode_gercek': '1_21_6'}, '34': {'numara': '34', 'publisher': 'Yanıt Yayınları', 'pkxkname': 'yanityayinlari', 'prefix': None, 'fernusCode_sifreli': '==gL4Oqdl4F83TSqVDTGkSaQ', 'fernusCode_gercek': '9_12_24'}, '35': {'numara': '35', 'publisher': 'Üçgen', 'pkxkname': 'ucgen', 'prefix': None, 'fernusCode_sifreli': '==AjXosd8tzz6kb3eiuTBNu6', 'fernusCode_gercek': '17_18_20'}, '355': {'numara': '355', 'publisher': 'EĞİTİM DEPOSU YAYINLARI', 'pkxkname': 'egitimdeposu', 'prefix': None, 'fernusCode_sifreli': '==giYAdO0wGvERRD6FCMMzmz', 'fernusCode_gercek': '2_26_4'}, '356': {'numara': '356', 'publisher': 'Madalyon Yayıncılık', 'pkxkname': 'madalyon', 'prefix': None, 'fernusCode_sifreli': '==gwhBondhHp7jKsAJetHL4C', 'fernusCode_gercek': '12_9_18'}, '357': {'numara': '357', 'publisher': 'BalKüpü Yayınları', 'pkxkname': 'balkupu', 'prefix': None, 'fernusCode_sifreli': '==AkQybIFj/rwosYBKDrQnfy', 'fernusCode_gercek': '2_26_5'}, '358': {'numara': '358', 'publisher': 'Deniz Pınar Yayıncılık', 'pkxkname': 'denizpinar', 'prefix': None, 'fernusCode_sifreli': '==QA9iXSUOV4f4XsknAzukym', 'fernusCode_gercek': '2_26_2'}, '359': {'numara': '359', 'publisher': 'Paraf Akademi', 'pkxkname': 'parafakademi', 'prefix': None, 'fernusCode_sifreli': '==AubnAL6wdElsI3lmw5X83G', 'fernusCode_gercek': '2_26_3'}, '360': {'numara': '360', 'publisher': 'Artıbir Yayınları', 'pkxkname': 'artibir', 'prefix': None, 'fernusCode_sifreli': '==AGWMtIPpSXzvFnU5UFn2y+', 'fernusCode_gercek': '5_4_8'}, '362': {'numara': '362', 'publisher': 'Bilnet Okulları', 'pkxkname': 'bilnet', 'prefix': None, 'fernusCode_sifreli': '==AO7tx0l2ncIUDnJFsaLbiM', 'fernusCode_gercek': '1_1_26'}, '363': {'numara': '363', 'publisher': 'ProFizik Yayınları', 'pkxkname': 'profizik', 'prefix': None, 'fernusCode_sifreli': '==QZGl48QvQUDf5zGjb08K1n', 'fernusCode_gercek': '2_24_26'}, '364': {'numara': '364', 'publisher': 'z-Kitap Dijital', 'pkxkname': 'zkitapdijital', 'prefix': None, 'fernusCode_sifreli': '==Qh2DPyazTd6gWM2ClWCBBK', 'fernusCode_gercek': '2_24_25'}, '366': {'numara': '366', 'publisher': 'Format Yayınları', 'pkxkname': 'formatyayinlari', 'prefix': None, 'fernusCode_sifreli': '==w3fQ6vHmMe9dOuIHC8+KqA', 'fernusCode_gercek': '2_24_23'}, '367': {'numara': '367', 'publisher': 'Probil', 'pkxkname': 'probilzkitap', 'prefix': None, 'fernusCode_sifreli': '==g8DpZutt6vJ564VeX5OLBn', 'fernusCode_gercek': '2_24_22'}, '368': {'numara': '368', 'publisher': 'Voltaj Okul', 'pkxkname': 'voltajokul', 'prefix': None, 'fernusCode_sifreli': '==wxEz2FadyZos/+AV2llcEQ', 'fernusCode_gercek': '2_24_21'}, '369': {'numara': '369', 'publisher': 'Bilimetik Yayınları', 'pkxkname': 'bilimetrik', 'prefix': None, 'fernusCode_sifreli': '==QJBDHhPPoJWncsP4aZKr9Z', 'fernusCode_gercek': '24_8_16'}, '37': {'numara': '37', 'publisher': 'PRF Yayınları', 'pkxkname': 'prfyayinlari', 'prefix': None, 'fernusCode_sifreli': '==A/S54mXutxHJLGBso1CazI', 'fernusCode_gercek': '8_1_2'}, '370': {'numara': '370', 'publisher': 'Fernus Yayınları', 'pkxkname': 'fernus', 'prefix': None, 'fernusCode_sifreli': '==wxEz2FadyZos/+AV2llcEQ', 'fernusCode_gercek': '2_24_21'}, '371': {'numara': '371', 'publisher': 'Fen Bilimleri', 'pkxkname': 'fenbilimleri', 'prefix': None, 'fernusCode_sifreli': '==gcFrbusvjZPJmSovWfho3K', 'fernusCode_gercek': '8_16_24'}, '372': {'numara': '372', 'publisher': 'XRAY Yayınları', 'pkxkname': 'xray', 'prefix': None, 'fernusCode_sifreli': '==wgPIL31kY6+mXWyDg2h3qd', 'fernusCode_gercek': '2_24_20'}, '373': {'numara': '373', 'publisher': 'FİLBAZ ÇOCUK YAYINCILIK', 'pkxkname': 'filbazcocuk', 'prefix': None, 'fernusCode_sifreli': '==Q5GF4wMjqLRY+DEBZMhtsl', 'fernusCode_gercek': '2_26_17'}, '374': {'numara': '374', 'publisher': 'İksir Yayıncılık', 'pkxkname': 'iksir', 'prefix': None, 'fernusCode_sifreli': '==gG0KIWisvjWUKmzOWOAaKL', 'fernusCode_gercek': '2_24_19'}, '375': {'numara': '375', 'publisher': 'Elfi Yayıncılık', 'pkxkname': 'elfi', 'prefix': None, 'fernusCode_sifreli': '==Af74XUOaaFvaX13Fshmvmv', 'fernusCode_gercek': '2_24_18'}, '376': {'numara': '376', 'publisher': 'Schola', 'pkxkname': 'schola', 'prefix': None, 'fernusCode_sifreli': '==AdBia3LvUrUzAD49qmNKvF', 'fernusCode_gercek': '19_13_26'}, '387': {'numara': '387', 'publisher': 'İsem Yayıncılık', 'pkxkname': 'dijitalisem', 'prefix': None, 'fernusCode_sifreli': '==wU/j8lFU//VUS9ahDjpZHd', 'fernusCode_gercek': '2_24_15'}, '39': {'numara': '39', 'publisher': 'Ankara Yayıncılık', 'pkxkname': 'ankarayayincilik', 'prefix': None, 'fernusCode_sifreli': '==gbL8TeNxdRLsv3Io/Tiafz', 'fernusCode_gercek': '6_13_26'}, '390': {'numara': '390', 'publisher': 'Arena Yayınları', 'pkxkname': 'arena', 'prefix': None, 'fernusCode_sifreli': '==AaOq0ukPh9ByDKPwY6VdbA', 'fernusCode_gercek': '2_24_13'}, '391': {'numara': '391', 'publisher': 'Forvet Yayınları', 'pkxkname': 'forvet', 'prefix': None, 'fernusCode_sifreli': '==wXw9LGqCYMEn0/xbzwrMly', 'fernusCode_gercek': '2_24_12'}, '392': {'numara': '392', 'publisher': 'Narataş Yayınları', 'pkxkname': 'naratas', 'prefix': None, 'fernusCode_sifreli': '==QQl2dMTxz1rPqRPNwhkE+m', 'fernusCode_gercek': '2_24_11'}, '4': {'numara': '4', 'publisher': 'ASPIRING PUBLISHING', 'pkxkname': 'aspiring', 'prefix': None, 'fernusCode_sifreli': '==QNNU4q2cHQ8y7K7gSocL+H', 'fernusCode_gercek': '2_1_15'}, '402': {'numara': '402', 'publisher': 'Mobese Yayınları', 'pkxkname': 'mobese', 'prefix': None, 'fernusCode_sifreli': '==AapBnSIsjMMZ8wcE5UlnKd', 'fernusCode_gercek': '2_24_10'}, '41': {'numara': '41', 'publisher': 'Karekök Yayınları', 'pkxkname': 'karekokyayinlari', 'prefix': None, 'fernusCode_sifreli': '==gVeGkJ0/8YgLGYSWsLjDa8', 'fernusCode_gercek': '6_2_4'}, '42': {'numara': '42', 'publisher': 'X Yayıncılık', 'pkxkname': 'xyayincilik', 'prefix': None, 'fernusCode_sifreli': '==A96rLMRuGSC/rtsHB4XsEl', 'fernusCode_gercek': '2_1_3'}, '43': {'numara': '43', 'publisher': 'Ünlüler Karması', 'pkxkname': 'unlulerkarmasi', 'prefix': None, 'fernusCode_sifreli': '==QRPK1fVFC7Ep6W7xG7a92J', 'fernusCode_gercek': '26_12_24'}, '45': {'numara': '45', 'publisher': 'ÜçDörtBeş Yayınları', 'pkxkname': 'ucdortbesyayinlari', 'prefix': None, 'fernusCode_sifreli': '==gxwddJKhIykBKkOQIId+pb', 'fernusCode_gercek': '1_10_20'}, '46': {'numara': '46', 'publisher': 'ATA', 'pkxkname': 'ata', 'prefix': None, 'fernusCode_sifreli': '==An8RxfOotF89x7TeOr/9W/', 'fernusCode_gercek': '1_2_6'}, '48': {'numara': '48', 'publisher': 'ERADİL', 'pkxkname': 'eradil', 'prefix': None, 'fernusCode_sifreli': '==A5txWzLP3fPC++lB5rzW6Z', 'fernusCode_gercek': '26_3_6'}, '49': {'numara': '49', 'publisher': 'ÖRNEK AKADEMİ', 'pkxkname': 'ornekakademi', 'prefix': None, 'fernusCode_sifreli': '==QgRlkkRiXNSfzJz4PznBzu', 'fernusCode_gercek': '10_3_6'}, '5': {'numara': '5', 'publisher': 'ADAY YAYINLARI', 'pkxkname': 'adayyayinlari', 'prefix': None, 'fernusCode_sifreli': '==wC8O67p2rwJa5pg7Jmqq1V', 'fernusCode_gercek': '26_2_4'}, '52': {'numara': '52', 'publisher': 'Rasyonel Yayınları', 'pkxkname': 'rasyonelyayinlari', 'prefix': None, 'fernusCode_sifreli': '==wxWtljSPBY0FAstVYHeT6H', 'fernusCode_gercek': '21_13_26'}, '53': {'numara': '53', 'publisher': 'Fi Yayınları', 'pkxkname': 'fiyayinlari', 'prefix': None, 'fernusCode_sifreli': '==wxzA+Rb9WWooWcxb5V0Vwe', 'fernusCode_gercek': '7_3_6'}, '54': {'numara': '54', 'publisher': 'Tammat', 'pkxkname': 'tammat', 'prefix': None, 'fernusCode_sifreli': '==AXruj34HL+qS3wplDY5sJ2', 'fernusCode_gercek': '1_1_2'}, '55': {'numara': '55', 'publisher': 'Kaliteli Eğitim Yayınları', 'pkxkname': 'keyyayinlari', 'prefix': None, 'fernusCode_sifreli': '==gTzqZhwkeeM/2y4chgH59K', 'fernusCode_gercek': '22_12_24'}, '56': {'numara': '56', 'publisher': 'EKSPERT', 'pkxkname': 'ekspert', 'prefix': None, 'fernusCode_sifreli': '==AqG7FYF10BzZvXQilZKvwV', 'fernusCode_gercek': '17_2_4'}, '57': {'numara': '57', 'publisher': 'Optik Yayinlari', 'pkxkname': 'optikyayinlari', 'prefix': None, 'fernusCode_sifreli': '==QasKfygqWno03fBC1xRCJ6', 'fernusCode_gercek': '2_1_19'}, '58': {'numara': '58', 'publisher': 'Model Eğitim', 'pkxkname': 'modelegitim', 'prefix': None, 'fernusCode_sifreli': '==Azq7kXSfbLPgITSUt0QhH0', 'fernusCode_gercek': '7_14_22'}, '59': {'numara': '59', 'publisher': 'Endemik Yayınları', 'pkxkname': 'endemikyayinlari', 'prefix': None, 'fernusCode_sifreli': '==Qng9TFFFHPB4P36t8gYjBS', 'fernusCode_gercek': '22_1_2'}, '6': {'numara': '6', 'publisher': 'IQ YAYINLARI', 'pkxkname': 'iqyayinlari', 'prefix': None, 'fernusCode_sifreli': '==wzAl/mqt0tG7Uz6KCklYN0', 'fernusCode_gercek': '2_1_5'}, '60': {'numara': '60', 'publisher': 'Meraklı Zihinler', 'pkxkname': 'meraklizihinler', 'prefix': None, 'fernusCode_sifreli': '==g6Vd3CMgTUqeysyQpTf3xN', 'fernusCode_gercek': '1_11_16'}, '62': {'numara': '62', 'publisher': 'Kültür Yayıncılık', 'pkxkname': 'dijiogretmen', 'prefix': None, 'fernusCode_sifreli': '==QJivUYSNn30COKDZF8XvRx', 'fernusCode_gercek': '9_10_12'}, '63': {'numara': '63', 'publisher': 'Benim Hocam', 'pkxkname': 'benimhocam', 'prefix': None, 'fernusCode_sifreli': '==AkCKme1wgqxQvzlnlTFHG+', 'fernusCode_gercek': '23_11_22'}, '65': {'numara': '65', 'publisher': 'Mavi Tikli Yayıncılık', 'pkxkname': 'mavitikli', 'prefix': None, 'fernusCode_sifreli': '==wWWv+obntg8cN0zES+KQSX', 'fernusCode_gercek': '25_7_14'}, '66': {'numara': '66', 'publisher': 'Altın Karma Yayınları', 'pkxkname': 'altinkarma', 'prefix': None, 'fernusCode_sifreli': '==QQEgQmMSJrk5Y84mrFcMFP', 'fernusCode_gercek': '23_10_20'}, '67': {'numara': '67', 'publisher': 'Startfen', 'pkxkname': 'startfen', 'prefix': None, 'fernusCode_sifreli': '==AaQCpHM5UwBpD66DuVO2lv', 'fernusCode_gercek': '1_12_15'}, '68': {'numara': '68', 'publisher': 'Çalışkan Arı', 'pkxkname': 'caliskanari', 'prefix': None, 'fernusCode_sifreli': '==AzUjEdd2E/qMO3Ni/Fac52', 'fernusCode_gercek': '6_15_7'}, '69': {'numara': '69', 'publisher': 'FOR EN ELT', 'pkxkname': 'forenelt', 'prefix': None, 'fernusCode_sifreli': '==gWU5JGkBjgn7gK7bI6nKjw', 'fernusCode_gercek': '26_9_18'}, '7': {'numara': '7', 'publisher': 'Strateji Yayınları', 'pkxkname': 'stratejiyayinlari', 'prefix': None, 'fernusCode_sifreli': '==Q8QOYP8lqrMjlI04N52sj+', 'fernusCode_gercek': '19_2_4'}, '70': {'numara': '70', 'publisher': 'Zeka Küpü Yayınları', 'pkxkname': 'zekakupuyayinlari', 'prefix': None, 'fernusCode_sifreli': '==wI0yqxo/JixmCNrgLixFRu', 'fernusCode_gercek': '9_10_20'}, '78': {'numara': '78', 'publisher': 'Tekden', 'pkxkname': 'tekden', 'prefix': None, 'fernusCode_sifreli': '==QM6z4zjboczMHUw7aGlsXh', 'fernusCode_gercek': '2_17_1'}, '81': {'numara': '81', 'publisher': 'Data Yayınları', 'pkxkname': 'data', 'prefix': None, 'fernusCode_sifreli': '==QDUkVsFQ44oOeglWUBYPky', 'fernusCode_gercek': '2_17_4'}, '82': {'numara': '82', 'publisher': 'Analiz Yayınları', 'pkxkname': 'analiz', 'prefix': None, 'fernusCode_sifreli': '==Q482czemjUSMDX0rKoO7Ug', 'fernusCode_gercek': '7_8_10'}, '83': {'numara': '83', 'publisher': 'GO Yayınları', 'pkxkname': 'goyayinlari', 'prefix': None, 'fernusCode_sifreli': '==w3URlqN9PxSD2fd5Hdq4rc', 'fernusCode_gercek': '22_6_12'}, '84': {'numara': '84', 'publisher': 'Berkay Yayıncılık', 'pkxkname': 'berkay', 'prefix': None, 'fernusCode_sifreli': '==QbFxNernnvrPf06wqcaR7t', 'fernusCode_gercek': '26_7_14'}, '86': {'numara': '86', 'publisher': 'Mozaik Yayınları', 'pkxkname': 'mozaikyayinlari', 'prefix': None, 'fernusCode_sifreli': '==QSfM1nwZRaRqgLYvi0sjPr', 'fernusCode_gercek': '23_12_24'}, '87': {'numara': '87', 'publisher': 'Yükseliş Dijital', 'pkxkname': 'yukselis', 'prefix': None, 'fernusCode_sifreli': '==gMus4aTt2EcjN32+tpVcby', 'fernusCode_gercek': '2_26_25'}, '88': {'numara': '88', 'publisher': 'Ordinat Yayınlari', 'pkxkname': 'ordinatyayinlari', 'prefix': None, 'fernusCode_sifreli': '==QFg2cBBrQhhuUH5JatbI9s', 'fernusCode_gercek': '26_8_16'}, '89': {'numara': '89', 'publisher': 'Karacan Eğitim Kurumları', 'pkxkname': 'karacan', 'prefix': None, 'fernusCode_sifreli': '==AqXpk5lh+ZpAx/5vRvA3lw', 'fernusCode_gercek': '2_1_17'}, '9': {'numara': '9', 'publisher': 'Adrenalin Yayınları', 'pkxkname': 'adrenalin', 'prefix': None, 'fernusCode_sifreli': '==ABTmZ0A3VaRNQyN1tbuXbP', 'fernusCode_gercek': '26_6_12'}, '92': {'numara': '92', 'publisher': 'Kondisyon Dijital', 'pkxkname': 'kondisyon', 'prefix': None, 'fernusCode_sifreli': '==AyGzr5c6aE7ZUGapGQXeoj', 'fernusCode_gercek': '2_26_22'}, '93': {'numara': '93', 'publisher': 'Koşul Yayıncılık', 'pkxkname': 'kosulyayincilik', 'prefix': None, 'fernusCode_sifreli': '==AO7tx0l2ncIUDnJFsaLbiM', 'fernusCode_gercek': '1_1_26'}, '95': {'numara': '95', 'publisher': 'Açı Yayınları', 'pkxkname': 'aciyayinlari', 'prefix': None, 'fernusCode_sifreli': '==QI69uD1036wrzP4+sHLZzg', 'fernusCode_gercek': '21_11_22'}, '96': {'numara': '96', 'publisher': 'Pruva Akademi', 'pkxkname': 'pruvaakademi', 'prefix': None, 'fernusCode_sifreli': '==wmJzlWu7X6MNVzeztmUF9W', 'fernusCode_gercek': '18_6_12'}, '97': {'numara': '97', 'publisher': 'Matsev Yayıncılık', 'pkxkname': 'matsevyayincilik', 'prefix': None, 'fernusCode_sifreli': '==AbGIVwSI82DDHwaO6AZxu0', 'fernusCode_gercek': '19_10_20'}, '98': {'numara': '98', 'publisher': 'TED', 'pkxkname': 'ted', 'prefix': None, 'fernusCode_sifreli': '==QgMbLHgc08ZvK5gFfuPZfY', 'fernusCode_gercek': '24_3_6'}, 'altinkarma': {'numara': 'altinkarma', 'publisher': 'Altın Karma Yayınları', 'pkxkname': 'altinkarma', 'prefix': 'altinkarma', 'fernusCode_sifreli': '==QQEgQmMSJrk5Y84mrFcMFP', 'fernusCode_gercek': '23_10_20'}, 'analiz': {'numara': 'analiz', 'publisher': 'Analiz Yayınları', 'pkxkname': 'analiz', 'prefix': 'analiz', 'fernusCode_sifreli': '==Q482czemjUSMDX0rKoO7Ug', 'fernusCode_gercek': '7_8_10'}, 'ankarayayincilik': {'numara': 'ankarayayincilik', 'publisher': 'Ankara Yayıncılık', 'pkxkname': 'ankarayayincilik', 'prefix': 'ankarayayincilik', 'fernusCode_sifreli': '==gbL8TeNxdRLsv3Io/Tiafz', 'fernusCode_gercek': '6_13_26'}, 'ari': {'numara': 'ari', 'publisher': 'Arı', 'pkxkname': 'ari', 'prefix': 'ari', 'fernusCode_sifreli': '==wgwv4nLemBsshAOG+fYpVS', 'fernusCode_gercek': '7_14_21'}, 'artibir': {'numara': 'artibir', 'publisher': 'Artıbir Yayınları', 'pkxkname': 'artibir', 'prefix': 'artibir', 'fernusCode_sifreli': '==AGWMtIPpSXzvFnU5UFn2y+', 'fernusCode_gercek': '5_4_8'}, 'ata': {'numara': 'ata', 'publisher': 'ATA', 'pkxkname': 'ata', 'prefix': 'ata', 'fernusCode_sifreli': '==An8RxfOotF89x7TeOr/9W/', 'fernusCode_gercek': '1_2_6'}, 'benimhocam': {'numara': 'benimhocam', 'publisher': 'Benim Hocam', 'pkxkname': 'benimhocam', 'prefix': 'benimhocam', 'fernusCode_sifreli': '==AkCKme1wgqxQvzlnlTFHG+', 'fernusCode_gercek': '23_11_22'}, 'bilfen': {'numara': 'bilfen', 'publisher': 'Bilfen', 'pkxkname': 'bilfen', 'prefix': 'bilfen', 'fernusCode_sifreli': '==gJDjWtDlljMO/RjggifEPV', 'fernusCode_gercek': '3_12_24'}, 'caliskanari': {'numara': 'caliskanari', 'publisher': 'Çalışkan Arı', 'pkxkname': 'caliskanari', 'prefix': 'caliskanari', 'fernusCode_sifreli': '==AzUjEdd2E/qMO3Ni/Fac52', 'fernusCode_gercek': '6_15_7'}, 'canta': {'numara': 'canta', 'publisher': 'Çanta Yayıncılık', 'pkxkname': 'canta', 'prefix': 'canta', 'fernusCode_sifreli': '==A4udGEOLpcHQyAJr4jYHJb', 'fernusCode_gercek': '2_12_24'}, 'dereceyayinlari': {'numara': 'dereceyayinlari', 'publisher': 'Derece Yayınları', 'pkxkname': 'dereceyayinlari', 'prefix': 'dereceyayinlari', 'fernusCode_sifreli': '==gTLk4vh6wNZcH4VPbNneiW', 'fernusCode_gercek': '6_7_9'}, 'endemikyayinlari': {'numara': 'endemikyayinlari', 'publisher': 'Endemik Yayınları', 'pkxkname': 'endemikyayinlari', 'prefix': 'endemikyayinlari', 'fernusCode_sifreli': '==Qng9TFFFHPB4P36t8gYjBS', 'fernusCode_gercek': '22_1_2'}, 'esenyayinlari': {'numara': 'esenyayinlari', 'publisher': 'Esen Yayınları', 'pkxkname': 'esenyayinlari', 'prefix': 'esenyayinlari', 'fernusCode_sifreli': '==QAiSmulgqD4cxwaBKNSbZQ', 'fernusCode_gercek': '3_6_10'}, 'fenomen': {'numara': 'fenomen', 'publisher': 'FENOMEN', 'pkxkname': 'fenomen', 'prefix': 'fenomen', 'fernusCode_sifreli': '==AB4lf+uPgyIJQMOrbN4uFl', 'fernusCode_gercek': '7_1_2'}, 'final': {'numara': 'final', 'publisher': 'Final Kurumsal Yayinlari', 'pkxkname': 'final', 'prefix': 'final', 'fernusCode_sifreli': '==QlkTjsY5tUPfEY60KKGgzz', 'fernusCode_gercek': '2_1_21'}, 'gunayyayinlari': {'numara': 'gunayyayinlari', 'publisher': 'Günay Yayınları', 'pkxkname': 'gunayyayinlari', 'prefix': 'gunayyayinlari', 'fernusCode_sifreli': '==AMc23nfN/+IG9rJbDB7guP', 'fernusCode_gercek': '9_4_8'}, 'hizyayinlari': {'numara': 'hizyayinlari', 'publisher': 'Hız Yayınları', 'pkxkname': 'hizyayinlari', 'prefix': 'hizyayinlari', 'fernusCode_sifreli': '==gNBvPrdq9uAUPH7mA4sbIu', 'fernusCode_gercek': '3_3_6'}, 'kurmay': {'numara': 'kurmay', 'publisher': 'More And More', 'pkxkname': 'kurmay', 'prefix': 'kurmay', 'fernusCode_sifreli': '==AnR1upKjObnIRg9TCHJzNP', 'fernusCode_gercek': '1_4_8'}, 'mavideniz': {'numara': 'mavideniz', 'publisher': 'Mavi Deniz Yayınları', 'pkxkname': 'mavideniz', 'prefix': 'mavideniz', 'fernusCode_sifreli': '==wjlfPITlzaJrlJtEvfNddI', 'fernusCode_gercek': '1_7_14'}, 'modelegitim': {'numara': 'modelegitim', 'publisher': 'Model Eğitim', 'pkxkname': 'modelegitim', 'prefix': 'modelegitim', 'fernusCode_sifreli': '==Azq7kXSfbLPgITSUt0QhH0', 'fernusCode_gercek': '7_14_22'}, 'mozaikyayinlari': {'numara': 'mozaikyayinlari', 'publisher': 'Mozaik Yayınları', 'pkxkname': 'mozaikyayinlari', 'prefix': 'mozaikyayinlari', 'fernusCode_sifreli': '==QSfM1nwZRaRqgLYvi0sjPr', 'fernusCode_gercek': '23_12_24'}, 'muba': {'numara': 'muba', 'publisher': 'MUBA', 'pkxkname': 'muba', 'prefix': 'muba', 'fernusCode_sifreli': '==Q2WphUNNMYDWvx8XOFGsYK', 'fernusCode_gercek': '4_7_14'}, 'oksijen': {'numara': 'oksijen', 'publisher': 'Oksijen Yayınları', 'pkxkname': 'oksijen', 'prefix': 'oksijen', 'fernusCode_sifreli': '==ATEqsLIa7ExwmWmfUYaVQt', 'fernusCode_gercek': '26_10_20'}, 'okyanus': {'numara': 'okyanus', 'publisher': 'Okyanus', 'pkxkname': 'okyanus', 'prefix': 'okyanus', 'fernusCode_sifreli': '==wm9r5wyVtUI9f6x3kbeaoK', 'fernusCode_gercek': '1_20_2'}, 'pruvaakademi': {'numara': 'pruvaakademi', 'publisher': 'Pruva Akademi', 'pkxkname': 'pruvaakademi', 'prefix': 'pruvaakademi', 'fernusCode_sifreli': '==wmJzlWu7X6MNVzeztmUF9W', 'fernusCode_gercek': '18_6_12'}, 'tammat': {'numara': 'tammat', 'publisher': 'Tammat', 'pkxkname': 'tammat', 'prefix': 'tammat', 'fernusCode_sifreli': '==AXruj34HL+qS3wplDY5sJ2', 'fernusCode_gercek': '1_1_2'}, 'toprak': {'numara': 'toprak', 'publisher': 'Toprak Yayıncılık', 'pkxkname': 'toprak', 'prefix': 'toprak', 'fernusCode_sifreli': '==A2MJ/AtSuzAjElex9c3Dbt', 'fernusCode_gercek': '9_5_10'}, 'unlulerkarmasi': {'numara': 'unlulerkarmasi', 'publisher': 'Ünlüler Karması', 'pkxkname': 'unlulerkarmasi', 'prefix': 'unlulerkarmasi', 'fernusCode_sifreli': '==QRPK1fVFC7Ep6W7xG7a92J', 'fernusCode_gercek': '26_12_24'}, 'yediiklim': {'numara': 'yediiklim', 'publisher': 'Yediiklim Yayınları', 'pkxkname': 'yediiklim', 'prefix': 'yediiklim', 'fernusCode_sifreli': '==w8YsC3ERMDlh6W37iRw2or', 'fernusCode_gercek': '2_26_20'}}
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 PDF_DIR = r"c:\Z_Kitap_ve_Flip\PDF"
@@ -109,14 +114,24 @@ def fernus_web_make_key(fernus_code, master):
 
 def yayinevi_onbellek_al(numara):
     try:
-        if not os.path.isdir(YAYINEVLERI_DIR): return None, None
-        json_yolu = os.path.join(YAYINEVLERI_DIR, f"{numara}.json")
-        if not os.path.isfile(json_yolu): return None, None
-        with open(json_yolu, 'r', encoding='utf-8') as f: kayit = json.load(f)
-        pub = {'publisher': kayit.get('publisher', '?'), 'pkxkname': kayit.get('pkxkname', ''), 'fernusCode': kayit.get('fernusCode_sifreli', '')}
-        fc = kayit.get('fernusCode_gercek', '')
-        return pub, (fernus_web_make_key(fc, FALLBACK_MASTER) if fc else None)
-    except Exception: return None, None
+        num_str = str(numara).lower()
+        if num_str in YAYINEVLERI_DATA:
+            kayit = YAYINEVLERI_DATA[num_str]
+            pub = {'publisher': kayit.get('publisher', '?'), 'pkxkname': kayit.get('pkxkname', ''), 'fernusCode': kayit.get('fernusCode_sifreli', '')}
+            fc = kayit.get('fernusCode_gercek', '')
+            return pub, (fernus_web_make_key(fc, FALLBACK_MASTER) if fc else None)
+
+        if os.path.isdir(YAYINEVLERI_DIR):
+            json_yolu = os.path.join(YAYINEVLERI_DIR, f"{numara}.json")
+            if os.path.isfile(json_yolu):
+                with open(json_yolu, 'r', encoding='utf-8') as f: kayit = json.load(f)
+                pub = {'publisher': kayit.get('publisher', '?'), 'pkxkname': kayit.get('pkxkname', ''), 'fernusCode': kayit.get('fernusCode_sifreli', '')}
+                fc = kayit.get('fernusCode_gercek', '')
+                return pub, (fernus_web_make_key(fc, FALLBACK_MASTER) if fc else None)
+    except Exception:
+        pass
+    return None, None
+
 
 def fernus_web_url_parse(url):
     url = url.strip()
@@ -215,6 +230,8 @@ def fernus_indir_ve_coz_sayfa(url, hedef_yol, book_key):
                             final_dest = hedef_yol if hedef_yol.endswith(ext) else hedef_yol + ext
                             with open(final_dest, 'wb') as f: f.write(pt)
                             return True
+        except urllib.error.HTTPError as he:
+            if he.code in (404, 500): return False
         except Exception:
             time.sleep(0.2)
     return False
@@ -311,6 +328,35 @@ def gorsellerden_pdf_yap(gorsel_yollari, cikti_pdf_yolu, webp_kalite=100):
 # ==============================================================================
 # ANALİZ SERVİSLERİ
 # ==============================================================================
+
+def probe_sayfa_sayisi(pattern, referer=None, max_limit=450):
+    """İkili arama (Binary Search) ile kitabın gerçek sayfa sayısını 1-3 saniyede bulur"""
+    headers = {'User-Agent': DEFAULT_UA}
+    if referer: headers['Referer'] = referer
+
+    def _var_mi(p):
+        u = pattern.replace('{page}', str(p)).replace('{p}', str(p))
+        try:
+            req = urllib.request.Request(u, headers=headers)
+            with urllib.request.urlopen(req, timeout=3.5, context=SSL_CTX) as r:
+                return r.status == 200
+        except Exception:
+            return False
+
+    if not _var_mi(1):
+        if _var_mi(0): return 1
+        return 0
+
+    low, high, en_son = 1, max_limit, 1
+    while low <= high:
+        mid = (low + high) // 2
+        if _var_mi(mid):
+            en_son = mid
+            low = mid + 1
+        else:
+            high = mid - 1
+    return en_son
+
 
 def analiz_et(girdi_url):
     girdi = girdi_url.strip()
@@ -419,20 +465,36 @@ def analiz_et(girdi_url):
         book_key = fernus_web_book_key_al(pub)
 
         title = info.get('kitap_adi', 'Fernus_Kitap')
+        ref = "https://zkitapx.fernus.net/"
+
+        gercek_sayfa = probe_sayfa_sayisi(info['sayfa_pattern_soru'], referer=ref, max_limit=450)
+        if gercek_sayfa < 1:
+            for alt_ext in ['jpg', 'png']:
+                alt_pat = re.sub(r'\.(webp|png|jpe?g)$', f'.{alt_ext}', info['sayfa_pattern_soru'], flags=re.IGNORECASE)
+                alt_c = probe_sayfa_sayisi(alt_pat, referer=ref, max_limit=450)
+                if alt_c > 0:
+                    info['sayfa_pattern_soru'] = alt_pat
+                    info['sayfa_pattern_cozum'] = re.sub(r'\.(webp|png|jpe?g)$', f'.{alt_ext}', info['sayfa_pattern_cozum'], flags=re.IGNORECASE)
+                    gercek_sayfa = alt_c
+                    break
+
+        total_pages = gercek_sayfa if gercek_sayfa > 0 else 60
+
         sayfalar = []
-        for p in range(1, 401):
+        for p in range(1, total_pages + 1):
             s_u = info['sayfa_pattern_soru'].replace('{page}', str(p))
             c_u = info['sayfa_pattern_cozum'].replace('{page}', str(p))
             sayfalar.append({'page': p, 'soru_url': s_u, 'cozum_url': c_u})
 
+        kapak = sayfalar[0]['soru_url'] if sayfalar else ""
         return {
             'platform': 'FERNUS_WEB',
             'platform_label': f"Fernus Web ({info.get('yayinevi', 'Z-Kitap')})",
             'book_id': info.get('kitap_adi', 'fernus'),
             'title': title,
-            'pages_count': len(sayfalar),
+            'pages_count': total_pages,
             'has_solution': True,
-            'cover_url': '',
+            'cover_url': kapak,
             'book_key_hex': book_key.hex() if book_key else '',
             'pages': sayfalar
         }
@@ -477,18 +539,27 @@ def analiz_et(girdi_url):
         clean_no_query = girdi.split('?')[0].rstrip('/')
         parcalar = [p for p in clean_no_query.split('/') if p and not p.lower().endswith(('.png', '.webp', '.jpg', '.jpeg', '.gif'))]
         kitap_adi = f"Impark_{parcalar[-1]}" if parcalar else "Impark_Kitap"
+
+        parsed_imp = urllib.parse.urlparse(girdi)
+        ref = f"{parsed_imp.scheme}://{parsed_imp.netloc}/"
+
+        gercek_sayfa = probe_sayfa_sayisi(fixed_url, referer=ref, max_limit=450)
+        total_pages = gercek_sayfa if gercek_sayfa > 0 else 50
+
         pages = []
-        for p in range(1, 401):
+        for p in range(1, total_pages + 1):
             p_url = fixed_url.replace('{page}', str(p)).replace('{p}', str(p))
             pages.append({'page': p, 'soru_url': p_url, 'cozum_url': None})
+
         return {
             'platform': 'IMPARK_WEB',
             'platform_label': 'İmpark Web',
             'book_id': kitap_adi,
             'title': kitap_adi,
-            'pages_count': 400,
+            'pages_count': total_pages,
             'has_solution': False,
             'cover_url': pages[0]['soru_url'] if pages else '',
+            'referer': ref,
             'pages': pages
         }
 
@@ -642,9 +713,9 @@ def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
             ref = "https://www.altinkarne.com/" if kitap_verisi['platform'] == 'ALTIN_KARNE' else None
             if kitap_verisi['platform'] == 'SINAV_DIJITAL': ref = "https://www.sinavdijital.com/"
             if kitap_verisi['platform'] == 'FLIPHTML5': ref = kitap_verisi.get('referer') or "https://online.fliphtml5.com/"
+            if kitap_verisi['platform'] == 'IMPARK_WEB': ref = kitap_verisi.get('referer')
 
             is_fernus = kitap_verisi['platform'] == 'FERNUS_WEB'
-            is_impark = kitap_verisi['platform'] == 'IMPARK_WEB'
             bk_bytes = bytes.fromhex(kitap_verisi.get('book_key_hex', '')) if is_fernus and kitap_verisi.get('book_key_hex') else None
 
             tasks = []
@@ -663,7 +734,7 @@ def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
             tamamlanan = 0
 
             with ThreadPoolExecutor(max_workers=8) as ex:
-                if is_fernus or is_impark:
+                if is_fernus:
                     futs = {ex.submit(fernus_indir_ve_coz_sayfa, t[2], t[3], bk_bytes): t for t in tasks}
                 else:
                     futs = {ex.submit(dijital_indir_sayfa, t[2], t[3], ref): t for t in tasks}
