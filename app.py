@@ -612,6 +612,16 @@ def analiz_et(girdi_url):
 # ARKA PLAN İNDİRME MOTORU
 # ==============================================================================
 
+def benzersiz_pdf_adi(dizin, baslik_temiz, son_ek=""):
+    ek = f" - {son_ek}" if son_ek else ""
+    ad = f"[Mobil PDF] {baslik_temiz}{ek}" if not baslik_temiz.startswith("[Mobil PDF]") else f"{baslik_temiz}{ek}"
+    hedef = f"{ad}.pdf"
+    sayac = 1
+    while os.path.exists(os.path.join(dizin, hedef)):
+        sayac += 1
+        hedef = f"{ad} ({sayac}).pdf"
+    return hedef
+
 def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
     TASKS[task_id] = {
         'status': 'running',
@@ -626,7 +636,7 @@ def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
         try:
             pages = kitap_verisi['pages']
             temiz_baslik = re.sub(r'[\\/*?:"<>|]', '_', str(kitap_verisi['title'])).strip()[:100]
-            temp_dir = os.path.join(PDF_DIR, f"temp_{task_id[:8]}")
+            temp_dir = os.path.join(PDF_DIR, f"temp_{uuid.uuid4().hex[:8]}")
             os.makedirs(temp_dir, exist_ok=True)
 
             ref = "https://www.altinkarne.com/" if kitap_verisi['platform'] == 'ALTIN_KARNE' else None
@@ -681,8 +691,7 @@ def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
                 soru_img = [os.path.join(temp_dir, fn) for fn in all_files if fn.startswith('s_') and _is_valid_file(os.path.join(temp_dir, fn))]
                 soru_img.sort(key=lambda x: extract_page_number(os.path.basename(x)))
                 if soru_img:
-                    clean_name = f"[Mobil PDF] {temiz_baslik}" if not temiz_baslik.startswith("[Mobil PDF]") else temiz_baslik
-                    out_name = f"{clean_name}.pdf"
+                    out_name = benzersiz_pdf_adi(PDF_DIR, temiz_baslik)
                     out_pdf = os.path.join(PDF_DIR, out_name)
                     if gorsellerden_pdf_yap(soru_img, out_pdf, webp_kalite=webp_kalite):
                         uretilen_pdfler.append(out_name)
@@ -691,8 +700,7 @@ def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
                 cozum_img = [os.path.join(temp_dir, fn) for fn in all_files if fn.startswith('c_') and _is_valid_file(os.path.join(temp_dir, fn))]
                 cozum_img.sort(key=lambda x: extract_page_number(os.path.basename(x)))
                 if cozum_img:
-                    clean_cozum = f"[Mobil PDF] {temiz_baslik} - Çözümler" if not temiz_baslik.startswith("[Mobil PDF]") else f"{temiz_baslik} - Çözümler"
-                    out_cozum_name = f"{clean_cozum}.pdf"
+                    out_cozum_name = benzersiz_pdf_adi(PDF_DIR, temiz_baslik, son_ek="Çözümler")
                     out_cozum_pdf = os.path.join(PDF_DIR, out_cozum_name)
                     if gorsellerden_pdf_yap(cozum_img, out_cozum_pdf, webp_kalite=webp_kalite):
                         uretilen_pdfler.append(out_cozum_name)
