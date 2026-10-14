@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Z Kitap Mobil</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0F1B3D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A1128;
+      --card: #131E3D;
+      --card-border: #1E2D5A;
+      --primary: #FFD700;
+      --primary-hover: #FFC000;
+      --text: #FFFFFF;
+      --text-sub: #94A3B8;
+      --success: #10B981;
+      --danger: #EF4444;
+      --nav-bg: rgba(15, 27, 61, 0.96);
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      position: relative;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      touch-action: pan-y; /* Sağa sola taşmayı ve kaymayı kilitler */
+      -webkit-text-size-adjust: 100%;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 80px;
+    }
+
+    /* Üst Başlık (Header) */
+    header {
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      border: 2px solid var(--primary);
+    }
+    .brand h1 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .brand span { color: var(--primary); }
+    .status-badge {
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+    }
+
+    /* Üst Yatay Sekme Menüsü (Pill Bar) */
+    .top-nav-bar {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 10px 12px 2px 12px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
+    }
+    .top-nav-bar::-webkit-scrollbar { display: none; }
+    .top-pill {
+      flex: 1;
+      min-width: fit-content;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: #0D1630;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      color: var(--text-sub);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .top-pill.active {
+      background: var(--primary);
+      color: #0A1128;
+      border-color: var(--primary);
+    }
+    .top-pill i { font-size: 0.85rem; }
+
+    /* Ana Gövde */
+    main {
+      padding: 12px 12px;
+      flex: 1;
+      max-width: 520px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.22s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Kart Yapısı */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .card-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Giriş Kutusu */
+    .input-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .input-box input {
+      min-width: 0;
+      flex: 1;
+      width: 100%;
+      background: #0A122A;
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      transition: all 0.2s;
+      box-sizing: border-box;
+    }
+    .input-box input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.18);
+    }
+
+    /* Butonlar */
+    .btn {
+      background: var(--primary);
+      color: #0A1128;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-secondary { background: #1E2D5A; color: #FFFFFF; }
+    .btn-block { width: 100%; }
+
+    /* Kitap Önizleme */
+    .book-preview {
+      display: flex;
+      gap: 12px;
+      background: #0A122A;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      margin-top: 10px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .book-cover {
+      width: 65px;
+      height: 90px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #131E3D;
+      border: 1px solid var(--card-border);
+      flex-shrink: 0;
+    }
+    .book-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+    .book-badge {
+      display: inline-block;
+      font-size: 0.70rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(255, 215, 0, 0.12);
+      padding: 2px 7px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+      width: fit-content;
+    }
+    .book-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 4px;
+      color: #FFF;
+      word-break: break-word;
+    }
+    .book-stats { font-size: 0.76rem; color: var(--text-sub); }
+
+    /* Segmented Control (Mod Seçimi) */
+    .seg-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      background: #0A122A;
+      padding: 4px;
+      border-radius: 12px;
+      margin: 12px 0;
+      border: 1px solid var(--card-border);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .seg-btn {
+      padding: 9px 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .seg-btn.active {
+      background: var(--primary);
+      color: #0A1128;
+      font-weight: 700;
+    }
+
+    /* İlerleme Çubuğu */
+    .progress-box {
+      margin-top: 14px;
+      background: #0A122A;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      display: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .progress-bar-bg {
+      height: 8px;
+      background: #1E2D5A;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 8px 0 6px 0;
+      width: 100%;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10B981, #FFD700);
+      transition: width 0.3s;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      color: var(--text-sub);
+    }
+
+    /* Kütüphane Öğesi */
+    .lib-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #0A122A;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      margin-bottom: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .lib-info { flex: 1; min-width: 0; }
+    .lib-name {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #FFF;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .lib-meta { font-size: 0.72rem; color: var(--text-sub); display: flex; gap: 10px; }
+    .lib-actions { display: flex; gap: 5px; flex-shrink: 0; }
+    .lib-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.86rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .lib-btn-dl { background: var(--primary); color: #0A1128; }
+    .lib-btn-wa { background: #25D366; color: #FFFFFF; }
+    .lib-btn-del { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+
+    /* Sabit Alt Navigasyon (Bottom Navigation Bar) */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--card-border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 6px 2px calc(env(safe-area-inset-bottom, 6px) + 6px) 2px;
+      z-index: 200;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: var(--text-sub);
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 4px 2px;
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+    }
+    .nav-item i { font-size: 1.15rem; }
+    .nav-item.active { color: var(--primary); font-weight: 700; }
+    .nav-badge {
+      position: absolute;
+      top: 1px;
+      right: 18%;
+      background: var(--primary);
+      color: #0A1128;
+      font-size: 0.60rem;
+      font-weight: 800;
+      padding: 0 5px;
+      border-radius: 10px;
+      min-width: 16px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Üst Başlık -->
+  <header>
+    <div class="brand">
+      <img src="/icon.png" class="brand-logo" alt="Logo">
+      <div>
+        <h1>Z Kitap <span>Mobil</span></h1>
+      </div>
+    </div>
+    <div class="status-badge" onclick="location.reload(true)" style="cursor:pointer;" title="Sayfayı Yenile">
+      <div class="status-dot"></div> v2.7 (Canlı)
+    </div>
+  </header>
+
+  <!-- Üst Yatay Hızlı Sekme Seçici (Pill Bar) -->
+  <div class="top-nav-bar">
+    <button class="top-pill active" onclick="switchTab('tab-dijital', this)">
+      <i class="fa-solid fa-cloud-arrow-down"></i> Dijital
+    </button>
+    <button class="top-pill" onclick="switchTab('tab-web', this)">
+      <i class="fa-solid fa-globe"></i> Web Z-Kitap
+    </button>
+    <button class="top-pill" onclick="switchTab('tab-flip', this)">
+      <i class="fa-solid fa-bolt"></i> Flip & Supara
+    </button>
+    <button class="top-pill" onclick="switchTab('tab-library', this)">
+      <i class="fa-solid fa-folder-open"></i> Kütüphanem (<span id="top-lib-count">0</span>)
+    </button>
+  </div>
+
+  <main>
+    <!-- ============================================================== -->
+    <!-- SEKME 1: DİJİTAL KİTAPLAR (Altın Karne & Sınav Dijital) -->
+    <!-- ============================================================== -->
+    <div id="tab-dijital" class="tab-content active">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-cloud-arrow-down"></i> DİJİTAL KİTAPLAR
+        </div>
+        <p style="font-size: 0.80rem; color: var(--text-sub); margin-bottom: 8px;">
+          Altın Karne veya Sınav Dijital linki veya ID'lerini girin (Tek veya alt alta toplu):
+        </p>
+        <div style="position: relative; width: 100%; margin-bottom: 8px;">
+          <textarea id="dijital-url" rows="2" placeholder="Örn: 647 veya alt alta birden çok ID / link yapıştırın..." style="width: 100%; box-sizing: border-box; background: #0A122A; border: 1.5px solid var(--card-border); color: #FFF; padding: 10px 38px 10px 12px; border-radius: 12px; font-size: 0.82rem; resize: vertical; min-height: 52px; font-family: inherit; line-height: 1.4; outline: none;"></textarea>
+          <button type="button" onclick="clearInputBox('dijital-url')" title="Girişi Temizle" style="position: absolute; right: 10px; top: 12px; background: transparent; border: none; color: var(--text-sub); cursor: pointer; font-size: 1.05rem; padding: 4px;">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button class="btn btn-block" id="dijital-analiz-btn" style="padding: 12px;">
+            <i class="fa-solid fa-magnifying-glass"></i> İncele & Analiz Et
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="resetTab('dijital')" style="padding: 12px 16px;" title="Tümünü Sıfırla">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+
+        <!-- Tek Kitap Analiz Sonucu -->
+        <div id="dijital-sonuc" style="display: none;">
+          <div class="book-preview">
+            <img id="dijital-kapak" src="" class="book-cover" alt="Kapak">
+            <div class="book-info">
+              <span id="dijital-etiket" class="book-badge">Altın Karne</span>
+              <div id="dijital-baslik" class="book-name">Kitap Adı Yükleniyor...</div>
+              <div class="book-stats">
+                <i class="fa-solid fa-file-lines"></i> <span id="dijital-sayfa">0</span> Sayfa | Çözüm: <span id="dijital-cozum-durum">Var</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mod Seçimi -->
+          <div class="seg-group">
+            <button class="seg-btn active" data-mod="1" onclick="setDijitalMod(1, this)">Soru</button>
+            <button class="seg-btn" data-mod="2" onclick="setDijitalMod(2, this)">Çözüm</button>
+            <button class="seg-btn" data-mod="3" onclick="setDijitalMod(3, this)">Soru + Çözüm</button>
+          </div>
+
+          <button class="btn btn-block" id="dijital-indir-btn" style="padding: 14px; font-size: 0.95rem;">
+            <i class="fa-solid fa-download"></i> PDF İNDİR (BAŞLAT)
+          </button>
+        </div>
+
+        <!-- Toplu Dijital Analiz Sonucu -->
+        <div id="dijital-batch-sonuc" style="display: none; margin-top: 10px;">
+          <div style="background: rgba(255, 215, 0, 0.1); border: 1.5px solid var(--primary); border-radius: 12px; padding: 12px; margin-bottom: 10px;">
+            <div style="font-weight: 800; color: var(--primary); font-size: 0.95rem;">
+              <i class="fa-solid fa-layer-group"></i> <span id="dijital-batch-count">0</span> Kitap Hazır
+            </div>
+            <div style="font-size: 0.78rem; color: #CBD5E1; margin-top: 2px;">
+              Kitaplar sırayla indirilip otomatik olarak telefonunuza kaydedilecektir.
+            </div>
+          </div>
+          <div id="dijital-batch-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 10px;"></div>
+
+          <!-- Mod Seçimi (Toplu Dijital) -->
+          <div class="seg-group">
+            <button class="seg-btn active" data-mod="1" onclick="setDijitalMod(1, this)">Soru</button>
+            <button class="seg-btn" data-mod="2" onclick="setDijitalMod(2, this)">Çözüm</button>
+            <button class="seg-btn" data-mod="3" onclick="setDijitalMod(3, this)">Soru + Çözüm</button>
+          </div>
+
+          <button class="btn btn-block" id="dijital-batch-indir-btn" style="padding: 14px; font-size: 0.95rem;">
+            <i class="fa-solid fa-download"></i> TÜMÜNÜ İNDİR (TOPLU DİJİTAL)
+          </button>
+        </div>
+
+        <!-- Canlı İlerleme -->
+        <div id="dijital-progress" class="progress-box">
+          <div style="font-weight: 700; font-size: 0.82rem; color: var(--primary);" id="dijital-prog-msg">Hazırlanıyor...</div>
+          <div class="progress-bar-bg">
+            <div id="dijital-prog-fill" class="progress-bar-fill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="dijital-prog-detail">0 / 0</span>
+            <span id="dijital-prog-pct" style="font-weight: 700; color: #FFF;">%0</span>
+          </div>
+          <div id="dijital-tamam-actions" style="margin-top: 12px; display: none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- SEKME 2: WEB Z-KİTAP (Fernus & Fenomen - 141 Yayınevi) -->
+    <!-- ============================================================== -->
+    <div id="tab-web" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-globe"></i> WEB Z-KİTAP MOTORU
+        </div>
+        <p style="font-size: 0.80rem; color: var(--text-sub); margin-bottom: 8px;">
+          Fernus, Newton, İmpark veya Fenomen linki yapıştırın (Toplu halde alt alta da ekleyebilirsiniz):
+        </p>
+        <div style="position: relative; width: 100%; margin-bottom: 8px;">
+          <textarea id="web-url" rows="2" placeholder="Tek link veya alt alta toplu linkler yapıştırın... (Fernus, İmpark, Newton vb.)" style="width: 100%; box-sizing: border-box; background: var(--input-bg); border: 1px solid var(--card-border); color: #FFF; padding: 10px 38px 10px 12px; border-radius: 12px; font-size: 0.82rem; resize: vertical; min-height: 52px; font-family: inherit; line-height: 1.4;"></textarea>
+          <button type="button" onclick="clearInputBox('web-url')" title="Temizle" style="position: absolute; right: 10px; top: 12px; background: transparent; border: none; color: var(--text-sub); cursor: pointer; font-size: 1.05rem; padding: 4px;">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button class="btn btn-block" id="web-analiz-btn" style="padding: 12px;">
+            <i class="fa-solid fa-magnifying-glass"></i> İncele & Analiz Et
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="resetTab('web')" style="padding: 12px 16px;" title="Tümünü Sıfırla">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+
+        <!-- Tek Kitap Analiz Sonucu -->
+        <div id="web-sonuc" style="display: none;">
+          <div class="book-preview">
+            <div class="book-info">
+              <span id="web-etiket" class="book-badge">Fernus Web</span>
+              <div id="web-baslik" class="book-name">Kitap Adı</div>
+              <div class="book-stats">
+                <i class="fa-solid fa-shield-halved"></i> Şifre Çözücü: <span style="color:#10B981; font-weight:700;">Hazır</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mod Seçimi -->
+          <div class="seg-group">
+            <button class="seg-btn active" data-mod="1" onclick="setWebMod(1, this)">Soru</button>
+            <button class="seg-btn" data-mod="2" onclick="setWebMod(2, this)">Çözüm</button>
+            <button class="seg-btn" data-mod="3" onclick="setWebMod(3, this)">Soru + Çözüm</button>
+          </div>
+
+          <!-- Kalite Seçimi (Orijinal vs Dengeli) -->
+          <div style="margin: 8px 0 12px 0;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-sub); margin-bottom: 4px;">
+              <i class="fa-solid fa-sliders"></i> PDF KALİTESİ:
+            </div>
+            <div class="seg-group" style="grid-template-columns: 1fr 1fr; margin: 0;">
+              <button type="button" class="seg-btn quality-btn web-q-btn active" data-quality="100" onclick="setQuality(100, this)">
+                <i class="fa-solid fa-gem"></i> Orijinal (%100)
+              </button>
+              <button type="button" class="seg-btn quality-btn web-q-btn" data-quality="80" onclick="setQuality(80, this)">
+                <i class="fa-solid fa-feather"></i> Dengeli (%80 - Düşük MB)
+              </button>
+            </div>
+          </div>
+
+          <button class="btn btn-block" id="web-indir-btn" style="padding: 14px; font-size: 0.95rem;">
+            <i class="fa-solid fa-download"></i> PDF İNDİR (ŞİFRELERİ ÇÖZ)
+          </button>
+        </div>
+
+        <!-- Toplu Kitap Analiz Sonucu -->
+        <div id="web-batch-sonuc" style="display: none; margin-top: 10px;">
+          <div style="background: rgba(255, 215, 0, 0.1); border: 1.5px solid var(--primary); border-radius: 12px; padding: 12px; margin-bottom: 10px;">
+            <div style="font-weight: 800; color: var(--primary); font-size: 0.95rem;">
+              <i class="fa-solid fa-layer-group"></i> <span id="web-batch-count">0</span> Kitap Hazır
+            </div>
+            <div style="font-size: 0.78rem; color: #CBD5E1; margin-top: 2px;">
+              Kitaplar sırayla indirilip otomatik olarak telefonunuza kaydedilecektir.
+            </div>
+          </div>
+          <div id="web-batch-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 10px;"></div>
+
+          <!-- Kalite Seçimi (Toplu) -->
+          <div style="margin: 8px 0 12px 0;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-sub); margin-bottom: 4px;">
+              <i class="fa-solid fa-sliders"></i> PDF KALİTESİ:
+            </div>
+            <div class="seg-group" style="grid-template-columns: 1fr 1fr; margin: 0;">
+              <button type="button" class="seg-btn quality-btn web-batch-q-btn active" data-quality="100" onclick="setQuality(100, this)">
+                <i class="fa-solid fa-gem"></i> Orijinal (%100)
+              </button>
+              <button type="button" class="seg-btn quality-btn web-batch-q-btn" data-quality="80" onclick="setQuality(80, this)">
+                <i class="fa-solid fa-feather"></i> Dengeli (%80 - Düşük MB)
+              </button>
+            </div>
+          </div>
+
+          <button class="btn btn-block" id="web-batch-indir-btn" style="padding: 14px; font-size: 0.95rem;">
+            <i class="fa-solid fa-download"></i> TÜMÜNÜ İNDİR (TOPLU PDF)
+          </button>
+        </div>
+
+        <!-- Canlı İlerleme -->
+        <div id="web-progress" class="progress-box">
+          <div style="font-weight: 700; font-size: 0.82rem; color: var(--primary);" id="web-prog-msg">Hazırlanıyor...</div>
+          <div class="progress-bar-bg">
+            <div id="web-prog-fill" class="progress-bar-fill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="web-prog-detail">0 / 0</span>
+            <span id="web-prog-pct" style="font-weight: 700; color: #FFF;">%0</span>
+          </div>
+          <div id="web-tamam-actions" style="margin-top: 12px; display: none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- SEKME 3: FLIPHTML5 & SUPARA -->
+    <!-- ============================================================== -->
+    <div id="tab-flip" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <i class="fa-solid fa-bolt"></i> FLIPHTML5 & SUPARA MOTORU
+        </div>
+        <p style="font-size: 0.80rem; color: var(--text-sub); margin-bottom: 8px;">
+          FlipHTML5, Newton veya Supara FlipBook linkini yapıştırın:
+        </p>
+        <div style="position: relative; width: 100%; margin-bottom: 8px;">
+          <textarea id="flip-url" rows="2" placeholder="Örn: fliphtml5.com/... veya suparayayinlari.com/...guid=..." style="width: 100%; box-sizing: border-box; background: var(--input-bg); border: 1px solid var(--card-border); color: #FFF; padding: 10px 38px 10px 12px; border-radius: 12px; font-size: 0.82rem; resize: vertical; min-height: 52px; font-family: inherit; line-height: 1.4;"></textarea>
+          <button type="button" onclick="clearInputBox('flip-url')" title="Temizle" style="position: absolute; right: 10px; top: 12px; background: transparent; border: none; color: var(--text-sub); cursor: pointer; font-size: 1.05rem; padding: 4px;">
+            <i class="fa-solid fa-circle-xmark"></i>
+          </button>
+        </div>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button class="btn btn-block" id="flip-analiz-btn" style="padding: 12px;">
+            <i class="fa-solid fa-magnifying-glass"></i> İncele & Analiz Et
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="resetTab('flip')" style="padding: 12px 16px;" title="Tümünü Sıfırla">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+
+        <div id="flip-sonuc" style="display: none;">
+          <div class="book-preview">
+            <div class="book-info">
+              <span class="book-badge" id="flip-etiket">Supara Jet</span>
+              <div id="flip-baslik" class="book-name">Supara Kitap</div>
+              <div class="book-stats">
+                <i class="fa-solid fa-file-lines"></i> <span id="flip-sayfa">0</span> Sayfa
+              </div>
+            </div>
+          </div>
+
+          <!-- Kalite Seçimi (Flip) -->
+          <div style="margin: 8px 0 12px 0;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-sub); margin-bottom: 4px;">
+              <i class="fa-solid fa-sliders"></i> PDF KALİTESİ:
+            </div>
+            <div class="seg-group" style="grid-template-columns: 1fr 1fr; margin: 0;">
+              <button type="button" class="seg-btn quality-btn flip-q-btn active" data-quality="100" onclick="setQuality(100, this)">
+                <i class="fa-solid fa-gem"></i> Orijinal (%100)
+              </button>
+              <button type="button" class="seg-btn quality-btn flip-q-btn" data-quality="80" onclick="setQuality(80, this)">
+                <i class="fa-solid fa-feather"></i> Dengeli (%80 - Düşük MB)
+              </button>
+            </div>
+          </div>
+
+          <button class="btn btn-block" id="flip-indir-btn" style="padding: 14px; font-size: 0.95rem;">
+            <i class="fa-solid fa-download"></i> PDF İNDİR (JET MOTORU)
+          </button>
+        </div>
+
+        <!-- Toplu Flip Analiz Sonucu -->
+        <div id="flip-batch-sonuc" style="display: none; margin-top: 10px;">
+          <div style="background: rgba(255, 215, 0, 0.1); border: 1.5px solid var(--primary); border-radius: 12px; padding: 12px; margin-bottom: 10px;">
+            <div style="font-weight: 800; color: var(--primary); font-size: 0.95rem;">
+              <i class="fa-solid fa-layer-group"></i> <span id="flip-batch-count">0</span> Kitap Hazır
+            </div>
+            <div style="font-size: 0.78rem; color: #CBD5E1; margin-top: 2px;">
+              Kitaplar sırayla indirilip otomatik olarak telefonunuza kaydedilecektir.
+            </div>
+          </div>
+          <div id="flip-batch-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 10px;"></div>
+
+          <!-- Kalite Seçimi (Flip Toplu) -->
+          <div style="margin: 8px 0 12px 0;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-sub); margin-bottom: 4px;">
+              <i class="fa-solid fa-sliders"></i> PDF KALİTESİ:
+            </div>
+            <div class="seg-group" style="grid-template-columns: 1fr 1fr; margin: 0;">
+              <button type="button" class="seg-btn quality-btn flip-batch-q-btn active" data-quality="100" onclick="setQuality(100, this)">
+                <i class="fa-solid fa-gem"></i> Orijinal (%100)
+              </button>
+              <button type="button" class="seg-btn quality-btn flip-batch-q-btn" data-quality="80" onclick="setQuality(80, this)">
+                <i class="fa-solid fa-feather"></i> Dengeli (%80 - Düşük MB)
+              </button>
+            </div>
+          </div>
+
+          <button class="btn btn-block" id="flip-batch-indir-btn" style="padding: 14px; font-size: 0.95rem;">
+            <i class="fa-solid fa-download"></i> TÜMÜNÜ İNDİR (TOPLU FLIP)
+          </button>
+        </div>
+
+        <div id="flip-progress" class="progress-box">
+          <div style="font-weight: 700; font-size: 0.82rem; color: var(--primary);" id="flip-prog-msg">İndiriliyor...</div>
+          <div class="progress-bar-bg">
+            <div id="flip-prog-fill" class="progress-bar-fill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="flip-prog-detail">0 / 0</span>
+            <span id="flip-prog-pct" style="font-weight: 700; color: #FFF;">%0</span>
+          </div>
+          <div id="flip-tamam-actions" style="margin-top: 12px; display: none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- SEKME 4: KÜTÜPHANEM -->
+    <!-- ============================================================== -->
+    <div id="tab-library" class="tab-content">
+      <div class="card">
+        <div class="card-title" style="justify-content: space-between;">
+          <span><i class="fa-solid fa-folder-open"></i> KÜTÜPHANEM</span>
+          <button class="btn btn-secondary" onclick="loadLibrary()" style="padding: 5px 12px; font-size: 0.75rem;">
+            <i class="fa-solid fa-rotate"></i> Yenile
+          </button>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-sub); margin-bottom: 12px;">
+          Hazır PDF kitaplarınız. Tek dokunuşla telefonunuza indirebilir veya paylaşabilirsiniz:
+        </p>
+        <div id="library-list">
+          <div style="text-align: center; color: var(--text-sub); padding: 25px;">Yükleniyor...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sabit Alt Navigasyon Çubuğu -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" data-tab="tab-dijital" onclick="switchTab('tab-dijital', this)">
+      <i class="fa-solid fa-cloud-arrow-down"></i>
+      <span>Dijital</span>
+    </div>
+    <div class="nav-item" data-tab="tab-web" onclick="switchTab('tab-web', this)">
+      <i class="fa-solid fa-globe"></i>
+      <span>Web Z-Kitap</span>
+    </div>
+    <div class="nav-item" data-tab="tab-flip" onclick="switchTab('tab-flip', this)">
+      <i class="fa-solid fa-bolt"></i>
+      <span>Flip & Supara</span>
+    </div>
+    <div class="nav-item" data-tab="tab-library" onclick="switchTab('tab-library', this)">
+      <i class="fa-solid fa-folder-open"></i>
+      <span>Kütüphanem</span>
+      <span class="nav-badge" id="bottom-lib-count">0</span>
+    </div>
+  </nav>
+
+  <!-- WhatsApp Bilgilendirme Modal -->
+  <div id="wa-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:300; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#131E3D; border:1px solid #1E2D5A; border-radius:18px; padding:20px; max-width:380px; width:100%; box-shadow:0 12px 32px rgba(0,0,0,0.6); box-sizing:border-box;">
+      <div id="wa-modal-header" style="display:flex; align-items:center; gap:8px; color:#25D366; font-size:1.1rem; font-weight:800; margin-bottom:12px;">
+        <i class="fa-brands fa-whatsapp" style="font-size:1.5rem;"></i> WhatsApp Paylaşımı
+      </div>
+      <div id="wa-modal-text" style="font-size:0.86rem; color:#E2E8F0; line-height:1.5; margin-bottom:16px;">
+        <!-- Dinamik İçerik -->
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button id="wa-modal-btn" class="btn btn-block" style="background:#25D366; color:#FFF; padding:12px;">
+          <i class="fa-brands fa-whatsapp"></i> WhatsApp'ı Aç
+        </button>
+        <button onclick="closeWaModal()" class="btn btn-secondary btn-block" style="padding:10px;">
+          Kapat
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js?v=2.7"></script>
+</body>
+</html>
