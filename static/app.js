@@ -661,29 +661,40 @@ function pollProgress(taskId, prefix) {
 
         const filesList = task.pdf_files_info || (task.pdf_files || []).map(f => ({ name: f, url: `/pdf/${encodeURIComponent(f)}`, short_url: '' }));
 
-        // 1. PDF BİTTİĞİNDE TELEFONA OTOMATİK İNDİR (Sırayla, çakışmayı ve bildirim selini önlemek için 800ms aralıkla)
-        filesList.forEach((item, idx) => {
-          setTimeout(() => {
-            downloadPdfDirect(item.name, item.url, null);
-          }, idx * 800);
-        });
+        // 1. PDF BİTTİĞİNDE TELEFONA OTOMATİK İNDİR
+        // Tek kitap ise otomatik indir, çoklu kitapta ilkini indirip diğerlerini kartlardaki butonlarla sun (tarayıcı blokajını önler)
+        if (filesList.length > 0) {
+          downloadPdfDirect(filesList[0].name, filesList[0].url, null);
+        }
 
         // Tamamlandı Kartları (Sade, temiz ve pratik)
-        let html = '<div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">';
-        filesList.forEach(item => {
+        let html = '<div style="display:flex; flex-direction:column; gap:10px; margin-top:12px;">';
+        if (filesList.length > 1) {
+          html += `
+            <div style="background:rgba(16, 185, 129, 0.15); border:1px solid #10B981; border-radius:10px; padding:10px; color:#34D399; font-size:0.86rem; text-align:center; font-weight:700;">
+              🎉 Toplam ${filesList.length} Adet PDF Başarıyla Hazırlandı!
+            </div>
+          `;
+        }
+
+        filesList.forEach((item, idx) => {
+          const safeName = item.name.replace(/'/g, "\\'");
           html += `
             <div style="background:#0A122A; border:1px solid #1E2D5A; border-radius:12px; padding:12px;">
-              <div style="font-weight:700; font-size:0.86rem; margin-bottom:10px; color:#FFF; word-break:break-word;">
+              <div style="font-weight:700; font-size:0.88rem; margin-bottom:10px; color:#FFF; word-break:break-word;">
                 📄 ${item.name}
               </div>
-              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                <button onclick="sharePdfToWhatsApp('${item.name}')" class="btn" style="background:#25D366; color:#FFF; padding:11px; font-size:0.82rem;">
-                  <i class="fa-brands fa-whatsapp"></i> PDF'i Yolla
-                </button>
-                <button onclick="copyAndShareLink('${item.name}', '${item.short_url}', '${item.url}')" class="btn btn-secondary" style="padding:11px; font-size:0.82rem;">
-                  <i class="fa-solid fa-copy"></i> Linki Kopyala
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:8px;">
+                <a href="${item.url}" download="${item.name}" class="btn" style="background:#F59E0B; color:#000; font-weight:700; padding:10px; font-size:0.82rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:6px;">
+                  <i class="fa-solid fa-download"></i> Telefona İndir
+                </a>
+                <button onclick="sharePdfToWhatsApp('${safeName}')" class="btn" style="background:#25D366; color:#FFF; padding:10px; font-size:0.82rem;">
+                  <i class="fa-brands fa-whatsapp"></i> WhatsApp'a At
                 </button>
               </div>
+              <button onclick="copyAndShareLink('${safeName}', '${item.short_url}', '${item.url}')" class="btn btn-secondary" style="width:100%; padding:9px; font-size:0.80rem;">
+                <i class="fa-solid fa-copy"></i> Paylaşım Linkini Kopyala
+              </button>
             </div>
           `;
         });
