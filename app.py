@@ -58,6 +58,26 @@ SSL_CTX = ssl.create_default_context()
 SSL_CTX.check_hostname = False
 SSL_CTX.verify_mode = ssl.CERT_NONE
 
+def _bg_install_chrome():
+    if not sys.platform.startswith('linux'):
+        return
+    chrome_target = "/tmp/chrome/opt/google/chrome/google-chrome"
+    if os.path.isfile(chrome_target):
+        return
+    try:
+        os.makedirs("/tmp/chrome", exist_ok=True)
+        deb_path = "/tmp/chrome.deb"
+        print("[Bulut Motoru] Google Chrome Linux paketi arka planda indiriliyor...")
+        urllib.request.urlretrieve("https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb", deb_path)
+        import subprocess
+        subprocess.run(["dpkg", "-x", deb_path, "/tmp/chrome"], check=True)
+        if os.path.exists(deb_path): os.remove(deb_path)
+        print("[Bulut Motoru] Google Chrome basariyla kuruldu!")
+    except Exception as ex:
+        print(f"[Bulut Motoru] Chrome kurulum notu: {ex}")
+
+threading.Thread(target=_bg_install_chrome, daemon=True).start()
+
 # Fernus AES Şifreleme Sabitleri
 IV = b'kxk101l0O1l0O1l0'
 FALLBACK_MASTER = b'1l0O1l0O1l0O1l0O1l0O1l0O1l0O1l0O'
@@ -572,72 +592,114 @@ def analiz_et(girdi_url):
             title = f"FlipHTML5_{u_code}_{b_code}"
             pages = []
 
-            # 1. Aşama: Headless Chrome ile dinamik/WASM ile şifrelenmiş sayfa listesini çöz
-            driver = None
+            # 1. Hızlı Başlık Çekimi (oembed API veya HTML regex - 0.2 saniye)
             try:
-                from selenium import webdriver
-                from selenium.webdriver.chrome.options import Options
+                req_t = urllib.request.Request(f"https://fliphtml5.com/oembed/?url={book_url}&format=json", headers={'User-Agent': DEFAULT_UA})
+                with urllib.request.urlopen(req_t, timeout=3, context=SSL_CTX) as rt:
+                    oembed_data = json.loads(rt.read().decode('utf-8'))
+                    if oembed_data.get('title'):
+                        title = re.sub(r'[\\/*?:"<>|]', '_', oembed_data['title']).strip()
+            except Exception:
+                try:
+                    req_h = urllib.request.Request(book_url, headers={'User-Agent': DEFAULT_UA})
+                    with urllib.request.urlopen(req_h, timeout=4, context=SSL_CTX) as rh:
+                        html_txt = rh.read().decode('utf-8', errors='ignore')
+                        tm = re.search(r'<title>(.*?)</title>', html_txt, re.IGNORECASE)
+                        if tm and tm.group(1).strip() and tm.group(1).strip() != 'FlipHTML5':
+                            title = re.sub(r'[\\/*?:"<>|]', '_', tm.group(1)).strip()
+                except Exception:
+                    pass
 
-                chrome_opts = Options()
-                chrome_opts.add_argument('--headless=new')
-                chrome_opts.add_argument('--no-sandbox')
-                chrome_opts.add_argument('--disable-dev-shm-usage')
-                chrome_opts.add_argument('--disable-gpu')
-                chrome_opts.add_argument(f'user-agent={DEFAULT_UA}')
+            # Chrome binary kontrolü
+            chrome_bin = None
+            possible_chrome = [
+                "/tmp/chrome/opt/google/chrome/google-chrome",
+                "/opt/render/project/.render/chrome/opt/google/chrome/google-chrome",
+                "/usr/bin/google-chrome",
+                "/usr/bin/chromium",
+                "/usr/bin/chromium-browser",
+                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+                shutil.which('google-chrome'),
+                shutil.which('chrome'),
+                shutil.which('chromium')
+            ]
+            for p in possible_chrome:
+                if p and os.path.isfile(p):
+                    chrome_bin = p
+                    break
 
-                driver = webdriver.Chrome(options=chrome_opts)
-                driver.get(book_url)
-                time.sleep(3)
+            # 2. Aşama: Sadece Chrome varsa çalıştır (Asla takılıp donmaz, 15 sn zaman aşımı)
+            if chrome_bin or shutil.which('chrome') or shutil.which('google-chrome'):
+                driver = None
+                try:
+                    from selenium import webdriver
+                    from selenium.webdriver.chrome.options import Options
 
-                js_extract = '''
-                var urls = [];
-                var base = (window.bookConfig && window.bookConfig.bookBaseURL) || location.href.replace(/#.*$/, '');
-                if(!base.endsWith('/')) base += '/';
+                    chrome_opts = Options()
+                    chrome_opts.add_argument('--headless=new')
+                    chrome_opts.add_argument('--no-sandbox')
+                    chrome_opts.add_argument('--disable-dev-shm-usage')
+                    chrome_opts.add_argument('--disable-gpu')
+                    chrome_opts.add_argument(f'user-agent={DEFAULT_UA}')
+                    if chrome_bin:
+                        chrome_opts.binary_location = chrome_bin
 
-                var pList = null;
-                if (Array.isArray(window.fliphtml5_pages)) pList = window.fliphtml5_pages;
-                else if (window.bookConfig && Array.isArray(window.bookConfig.pages)) pList = window.bookConfig.pages;
-                else if (window.htmlConfig && Array.isArray(window.htmlConfig.pageEditor)) pList = window.htmlConfig.pageEditor;
+                    driver = webdriver.Chrome(options=chrome_opts)
+                    driver.set_page_load_timeout(15)
+                    driver.set_script_timeout(10)
+                    driver.get(book_url)
+                    time.sleep(2)
 
-                if (pList && pList.length > 0) {
-                    for(var i=0; i<pList.length; i++) {
-                        var p = pList[i];
-                        var u = null;
-                        if(typeof p === 'string') u = p;
-                        else if(typeof p === 'object' && p !== null) u = p.n || p.large || p.normal || p.src || p.l || p.ptf;
-                        if(Array.isArray(u)) u = u[0];
-                        if(u) {
-                            if(u.startsWith('http')) urls.push(u);
-                            else {
-                                var rel = u.replace(/\\\\/g, '/');
-                                while(rel.startsWith('./')) rel = rel.substring(2);
-                                if(rel.startsWith('/')) rel = rel.substring(1);
-                                urls.push(base + rel);
+                    js_extract = '''
+                    var urls = [];
+                    var base = (window.bookConfig && window.bookConfig.bookBaseURL) || location.href.replace(/#.*$/, '');
+                    if(!base.endsWith('/')) base += '/';
+
+                    var pList = null;
+                    if (Array.isArray(window.fliphtml5_pages)) pList = window.fliphtml5_pages;
+                    else if (window.bookConfig && Array.isArray(window.bookConfig.pages)) pList = window.bookConfig.pages;
+                    else if (window.htmlConfig && Array.isArray(window.htmlConfig.pageEditor)) pList = window.htmlConfig.pageEditor;
+
+                    if (pList && pList.length > 0) {
+                        for(var i=0; i<pList.length; i++) {
+                            var p = pList[i];
+                            var u = null;
+                            if(typeof p === 'string') u = p;
+                            else if(typeof p === 'object' && p !== null) u = p.n || p.large || p.normal || p.src || p.l || p.ptf;
+                            if(Array.isArray(u)) u = u[0];
+                            if(u) {
+                                if(u.startsWith('http')) urls.push(u);
+                                else {
+                                    var rel = u.replace(/\\\\/g, '/');
+                                    while(rel.startsWith('./')) rel = rel.substring(2);
+                                    if(rel.startsWith('/')) rel = rel.substring(1);
+                                    urls.push(base + rel);
+                                }
                             }
                         }
                     }
-                }
-                var t = document.title || '';
-                return {title: t, urls: urls};
-                '''
+                    var t = document.title || '';
+                    return {title: t, urls: urls};
+                    '''
 
-                res = driver.execute_script(js_extract)
-                if res:
-                    raw_title = res.get('title', '')
-                    if raw_title and 'Just a moment' not in raw_title and raw_title.strip() != 'FlipHTML5':
-                        title = re.sub(r'[\\/*?:"<>|]', '_', raw_title).strip()
+                    res = driver.execute_script(js_extract)
+                    if res:
+                        raw_title = res.get('title', '')
+                        if raw_title and 'Just a moment' not in raw_title and raw_title.strip() != 'FlipHTML5':
+                            title = re.sub(r'[\\/*?:"<>|]', '_', raw_title).strip()
 
-                    found_urls = res.get('urls', [])
-                    for idx, u in enumerate(found_urls, 1):
-                        pages.append({'page': idx, 'soru_url': u, 'cozum_url': None})
-            except Exception as ex:
-                print(f"FlipHTML5 Headless Çözüm Hatası: {ex}")
-            finally:
-                if driver:
-                    try: driver.quit()
-                    except Exception: pass
+                        found_urls = res.get('urls', [])
+                        for idx, u in enumerate(found_urls, 1):
+                            pages.append({'page': idx, 'soru_url': u, 'cozum_url': None})
+                except Exception as ex:
+                    print(f"FlipHTML5 Headless Çözüm Hatası: {ex}")
+                finally:
+                    if driver:
+                        try: driver.quit()
+                        except Exception: pass
 
-            # 2. Aşama Fallback: Headless sayfaları çekemediyse olası formatları yokla
+            # 3. Aşama Fallback: Headless sayfaları çekemediyse veya Chrome yoksa olası formatları yokla
             if not pages:
                 candidates = [
                     f"https://online.fliphtml5.com/{u_code}/{b_code}/files/large/1.webp",
@@ -651,18 +713,21 @@ def analiz_et(girdi_url):
                 for cand in candidates:
                     try:
                         req_c = urllib.request.Request(cand, headers={'User-Agent': DEFAULT_UA, 'Referer': book_url})
-                        with urllib.request.urlopen(req_c, timeout=3, context=SSL_CTX) as rc:
+                        with urllib.request.urlopen(req_c, timeout=2.5, context=SSL_CTX) as rc:
                             if rc.status == 200 and len(rc.read()) > 500:
                                 working_tpl = cand.replace('/1.', '/{page}.')
                                 break
                     except Exception:
                         pass
 
-                if not working_tpl:
-                    working_tpl = f"https://online.fliphtml5.com/{u_code}/{b_code}/files/large/{{page}}.jpg"
+                if working_tpl:
+                    p_count = probe_sayfa_sayisi(working_tpl, referer=book_url, max_limit=450)
+                    total_p = p_count if p_count > 0 else 60
+                    for idx in range(1, total_p + 1):
+                        pages.append({'page': idx, 'soru_url': working_tpl.replace('{page}', str(idx)), 'cozum_url': None})
 
-                for idx in range(1, 401):
-                    pages.append({'page': idx, 'soru_url': working_tpl.replace('{page}', str(idx)), 'cozum_url': None})
+            if not pages:
+                raise ValueError("FlipHTML5 kitabı korumalı sayfa şifrelemesi kullanıyor. Bulut sunucuda Chrome hazır olana kadar FlipHTML5 kitaplarını lütfen bilgisayarınızdaki Z Kitap Mobil üzerinden indiriniz (veya Supara/Newton linki deneyiniz).")
 
             kapak = pages[0]['soru_url'] if pages else ""
             return {
