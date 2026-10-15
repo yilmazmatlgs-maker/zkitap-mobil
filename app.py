@@ -42,13 +42,13 @@ os.makedirs(STATIC_DIR, exist_ok=True)
 os.makedirs(PDF_DIR, exist_ok=True)
 
 def pdf_dizinini_temizle():
-    """Bulut sunucusunda disk ve bellek dolmasını önlemek için eski PDF'leri temizler"""
+    """Bulut sunucusunda disk ve bellek dolmasını önlemek için eski PDF'leri temizler (Maks 2 PDF)"""
     try:
         if not os.path.isdir(PDF_DIR): return
         files = [os.path.join(PDF_DIR, f) for f in os.listdir(PDF_DIR) if f.lower().endswith('.pdf')]
-        if len(files) > 10:
+        if len(files) > 2:
             files.sort(key=lambda x: os.path.getmtime(x))
-            for f in files[:-10]:
+            for f in files[:-2]:
                 try: os.remove(f)
                 except Exception: pass
     except Exception: pass
@@ -58,25 +58,8 @@ SSL_CTX = ssl.create_default_context()
 SSL_CTX.check_hostname = False
 SSL_CTX.verify_mode = ssl.CERT_NONE
 
-def _bg_install_chrome():
-    if not sys.platform.startswith('linux'):
-        return
-    chrome_target = "/tmp/chrome/opt/google/chrome/google-chrome"
-    if os.path.isfile(chrome_target):
-        return
-    try:
-        os.makedirs("/tmp/chrome", exist_ok=True)
-        deb_path = "/tmp/chrome.deb"
-        print("[Bulut Motoru] Google Chrome Linux paketi arka planda indiriliyor...")
-        urllib.request.urlretrieve("https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb", deb_path)
-        import subprocess
-        subprocess.run(["dpkg", "-x", deb_path, "/tmp/chrome"], check=True)
-        if os.path.exists(deb_path): os.remove(deb_path)
-        print("[Bulut Motoru] Google Chrome basariyla kuruldu!")
-    except Exception as ex:
-        print(f"[Bulut Motoru] Chrome kurulum notu: {ex}")
-
-threading.Thread(target=_bg_install_chrome, daemon=True).start()
+# 512 MB bellek sınırını korumak için tekli görev kilidi
+SINGLE_DOWNLOAD_LOCK = threading.Lock()
 
 # Fernus AES Şifreleme Sabitleri
 IV = b'kxk101l0O1l0O1l0'
@@ -769,6 +752,7 @@ def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
     }
 
     def run():
+        SINGLE_DOWNLOAD_LOCK.acquire()
         try:
             pages = kitap_verisi['pages']
             temiz_baslik = re.sub(r'[\\/*?:"<>|]', '_', str(kitap_verisi['title'])).strip()[:100]
@@ -842,6 +826,8 @@ def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
                         uretilen_pdfler.append(out_cozum_name)
 
             shutil.rmtree(temp_dir, ignore_errors=True)
+            import gc; gc.collect()
+            pdf_dizinini_temizle()
 
             if uretilen_pdfler:
                 refresh_short_map()
@@ -864,6 +850,11 @@ def indirme_gorevi_baslat(task_id, kitap_verisi, mod=1, webp_kalite=100):
         except Exception as e:
             TASKS[task_id]['status'] = 'failed'
             TASKS[task_id]['message'] = f"Hata: {str(e)}"
+        finally:
+            try:
+                SINGLE_DOWNLOAD_LOCK.release()
+            except Exception:
+                pass
 
     t = threading.Thread(target=run, daemon=True)
     t.start()
